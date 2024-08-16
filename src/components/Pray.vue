@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, onUnmounted } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import axios from 'axios';
@@ -11,7 +11,7 @@ const route = useRoute();
 
 const options = {
   strings: ['點擊輸入文字...(24字內)'],
-  loop: true,
+  // loop: true,
   typeSpeed: 100,
   showCursor: false,
 };
@@ -28,6 +28,8 @@ const filterWords = ref([]);
 const textareaRef = ref(null);
 const text = ref(true);
 const type = route.query.type;
+
+const userAgent = navigator.userAgent.toLowerCase();
 
 //safari 100vh
 const setViewportHeight = () => {
@@ -52,14 +54,6 @@ onMounted(async () => {
 function SendMessage(message_data, progressCallBack) {
   return ArplanetResourceBridge.SendMessage(message_data, progressCallBack);
 }
-
-// const audioPlayer = ref(null);
-// const audioSource =
-//   'https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com/web_project/prod/minhsiungdashiye/waterlight/Shining.mp3';
-
-// const audioPlayer2 = ref(null);
-// const audioSource2 =
-//   'https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com/web_project/prod/minhsiungdashiye/waterlight/river.mp3';
 
 const videoEnded = ref(false);
 
@@ -90,7 +84,7 @@ const onVideoEnded = () => {
   checkAndNavigate();
 };
 
-const checkAndNavigate = () => {
+const checkAndNavigate = async () => {
   if (videoEnded.value && send_success.value) {
     router.push(`/result`);
   }
@@ -122,42 +116,25 @@ const focusTextarea = () => {
 const showVideo = ref(false);
 const videoPlayer = ref(null);
 
-// const onVideoCanPlay = () => {
-//   videoReady.value = true;
-//   videoPlayer.value.play();
-// };
+const activeImage = ref(0);
 
-// const onVideoLoaded = () => {
-//   console.log('Video loaded, starting audio playback');
-//   if (audioPlayer.value) {
-//     audioPlayer.value.play().catch(error => {
-//       console.error('Error playing audio:', error);
-//     });
-//   }
-//   if (audioPlayer2.value) {
-//     audioPlayer2.value.play().catch(error => {
-//       console.error('Error playing audio 2:', error);
-//     });
-//   }
-// };
+const toggleImages = () => {
+  activeImage.value = activeImage.value === 0 ? 1 : 0;
+};
+
+let interval;
+
+onMounted(async () => {
+  interval = setInterval(toggleImages, 700);
+});
+
+onUnmounted(() => {
+  clearInterval(interval);
+});
 </script>
 
 <template>
   <div>
-    <!-- <div style="display: none">
-      <audio ref="audioPlayer" controls>
-        <source :src="audioSource" type="audio/mpeg" />
-        Your browser does not support the audio tag.
-      </audio>
-    </div>
-
-    <div style="display: none">
-      <audio ref="audioPlayer2" controls>
-        <source :src="audioSource2" type="audio/mpeg" />
-        Your browser does not support the audio tag.
-      </audio>
-    </div> -->
-
     <div
       v-if="!showVideo"
       id="background"
@@ -223,7 +200,15 @@ const videoPlayer = ref(null);
           class="absolute bottom-[40px] left-1/2 transform -translate-x-1/2 lg:scale-[1.5] lg:bottom-[100px]"
         >
           <div v-if="!typing && messageData.msg && !sending">
-            <img src="/hasInput.svg" alt="" @click="ClickSendMessagge" />
+            <img
+              :class="{
+                'scale-up': activeImage === 0,
+                'scale-down': activeImage !== 0,
+              }"
+              src="/hasInput.svg"
+              alt=""
+              @click="ClickSendMessagge"
+            />
           </div>
 
           <div v-if="!typing && !messageData.msg">
@@ -233,12 +218,13 @@ const videoPlayer = ref(null);
       </div>
     </div>
 
-    <div v-else class="video-container">
+    <div v-else="showVideo" class="video-container">
       <video
+        id="myVideo"
         ref="videoPlayer"
         class="full-screen-video"
-        autoplay
         @ended="onVideoEnded"
+        autoplay
       >
         <source
           :src="`https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com/web_project/prod/minhsiungdashiye/waterlight/video${type}.mp4`"
@@ -285,5 +271,15 @@ const videoPlayer = ref(null);
   color: #cccccc;
   resize: none;
   overflow: hidden;
+}
+
+.scale-up {
+  transform: scale(1.1);
+  transition: transform 0.5s ease-in-out;
+}
+
+.scale-down {
+  transform: scale(1);
+  transition: transform 0.5s ease-in-out;
 }
 </style>

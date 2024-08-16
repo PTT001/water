@@ -44,9 +44,11 @@ const backToHome = () => {
 
       <div
         v-show="showContent"
+        class="mt-[40px]"
         :class="['fade-content', { 'fade-in': contentVisible }]"
       >
-        <a-scene
+        <img src="/god.svg" alt="" />
+        <!-- <a-scene
           device-orientation-permission-ui="enabled: false"
           vr-mode-ui="enabled: false"
         >
@@ -72,18 +74,18 @@ const backToHome = () => {
               ></a-gltf-model>
             </a-entity>
           </a-entity>
-        </a-scene>
+        </a-scene> -->
       </div>
 
       <div
         v-show="showContent"
         :class="['fade-content', { 'fade-in': contentVisible }]"
       >
-        <div class="mt-[180px] sm:mt-[260px] lg:mt-[450px] relative">
+        <div class="mt-[-70px] md:mt-[-20px] lg:mt-[30px] relative">
           <img
             src="/cloud.svg"
             alt=""
-            class="scale-[1.35] sm:scale-[1.5] md:scale-[2] lg:scale-[2.5]"
+            class="scale-[1.35] sm:scale-[1.5] md:scale-[2] lg:scale-[2.2]"
           />
 
           <div class="absolute inset-0 top-12 flex items-center justify-center">
@@ -95,7 +97,7 @@ const backToHome = () => {
       </div>
 
       <div
-        class="absolute bottom-[40px] left-1/2 transform -translate-x-1/2 md:scale-[1.5] md:bottom-[140px]"
+        class="absolute bottom-[40px] left-1/2 transform -translate-x-1/2 2xl:scale-[1.1] 2xl:bottom-[140px]"
       >
         <div>
           <img src="/PlayAgain.svg" alt="" @click="backToHome" />
@@ -105,7 +107,7 @@ const backToHome = () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 :root {
   --adjusted-vh: 100vh;
 }

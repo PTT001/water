@@ -6,14 +6,17 @@
 //輸出路徑
 const LOCAL_FILE = './dist';
 //Bucket設定
-const S3_BUCKET_PROD = 'coreinteraction.arplanets.com';
+// const S3_BUCKET_PROD = 'coreinteraction.arplanets.com';
+const S3_BUCKET_PROD = 'arplanets';
 const S3_BUCKET_TEST = 'arplanets';
 //Bucket路徑設定
-const S3_BUCKET_PROD_PATH = '/web_project/prod/minhsiungdashiye/waterlight/';
+// const S3_BUCKET_PROD_PATH = '/web_project/prod/minhsiungdashiye/waterlight/';
+const S3_BUCKET_PROD_PATH = '/frontend-test/0424TEST/';
 const S3_BUCKET_TEST_PATH = '/frontend-test/WaterLightTest/';
 //最終url host
-const S3_HOST_PROD =
-  'https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com';
+// const S3_HOST_PROD =
+//   'https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com';
+const S3_HOST_PROD = 'https://s3.ap-southeast-1.amazonaws.com/arplanets';
 const S3_HOST_TEST = 'https://s3.ap-southeast-1.amazonaws.com/arplanets';
 //打包指令
 const BUILD_PROD_CMD = 'npm run build';
