@@ -29,8 +29,6 @@ const textareaRef = ref(null);
 const text = ref(true);
 const type = route.query.type;
 
-const userAgent = navigator.userAgent.toLowerCase();
-
 //safari 100vh
 const setViewportHeight = () => {
   const vh = window.innerHeight;
@@ -61,6 +59,7 @@ const ClickSendMessagge = async () => {
   showVideo.value = true;
   sending.value = true;
   videoEnded.value = false;
+  document.getElementById('myVideo').play();
 
   if (messageData.value.msg !== '') {
     filterMessage();

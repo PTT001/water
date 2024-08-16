@@ -32,6 +32,8 @@ const button = type => {
 onMounted(async () => {
   import('./result.vue');
   interval = setInterval(toggleImages, 700);
+  const userAgent = navigator.userAgent.toLowerCase();
+  alert(userAgent);
 });
 
 onUnmounted(() => {
