@@ -1,16 +1,16 @@
 <script setup>
-import { ref, onMounted, nextTick, onUnmounted } from 'vue';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import axios from 'axios';
-import { Typed } from '@duskmoon/vue3-typed-js';
-import { useRoute } from 'vue-router';
-import router from '../rotuer';
+import { ref, onMounted, nextTick, onUnmounted } from "vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import axios from "axios";
+import { Typed } from "@duskmoon/vue3-typed-js";
+import { useRoute } from "vue-router";
+import router from "../rotuer";
 
 const route = useRoute();
 
 const options = {
-  strings: ['點擊輸入文字...(24字內)'],
+  strings: ["點擊輸入文字...(24字內)"],
   // loop: true,
   typeSpeed: 100,
   showCursor: false,
@@ -21,8 +21,8 @@ const messageSent = ref(false);
 const send_success = ref(false);
 const typing = ref(false);
 const messageData = ref({
-  msg: '',
-  type: '',
+  msg: "",
+  type: "",
 });
 const filterWords = ref([]);
 const textareaRef = ref(null);
@@ -32,20 +32,21 @@ const type = route.query.type;
 //safari 100vh
 const setViewportHeight = () => {
   const vh = window.innerHeight;
-  document.documentElement.style.setProperty('--adjusted-vh', `${vh}px`);
+  document.documentElement.style.setProperty("--adjusted-vh", `${vh}px`);
 };
 
 setViewportHeight();
-window.addEventListener('resize', setViewportHeight);
+window.addEventListener("resize", setViewportHeight);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('filter_words.json');
+    const response = await axios.get("filter_words.json");
     filterWords.value = response.data;
   } catch (error) {
     console.error(error);
   }
 
+  videoPlayer.value.load();
   messageData.value.type = route.query.type;
 });
 
@@ -59,17 +60,17 @@ const ClickSendMessagge = async () => {
   showVideo.value = true;
   sending.value = true;
   videoEnded.value = false;
-  document.getElementById('myVideo').play();
+  videoPlayer.value.play();
 
-  if (messageData.value.msg !== '') {
+  if (messageData.value.msg !== "") {
     filterMessage();
-    SendMessage(messageData.value, evt => {})
-      .then(async res => {
+    SendMessage(messageData.value, (evt) => {})
+      .then(async (res) => {
         send_success.value = true;
         sending.value = false;
         checkAndNavigate();
       })
-      .catch(err => {
+      .catch((err) => {
         sending.value = false;
         send_success.value = false;
         toast.error(`${err.message}`);
@@ -90,17 +91,17 @@ const checkAndNavigate = async () => {
 };
 
 function filterMessage() {
-  filterWords.value.forEach(word => {
+  filterWords.value.forEach((word) => {
     messageData.value.msg = messageData.value.msg.replace(
-      new RegExp(`${word}`, 'g'),
-      '*'
+      new RegExp(`${word}`, "g"),
+      "*"
     );
   });
 }
 
 function shrinkTextarea(event) {
   typing.value = false;
-  if (messageData.value.msg === '') {
+  if (messageData.value.msg === "") {
     text.value = true;
   }
 }
@@ -135,7 +136,6 @@ onUnmounted(() => {
 <template>
   <div>
     <div
-      v-if="!showVideo"
       id="background"
       class="section0 flex justify-center bg-zoom-transition"
     >
@@ -217,13 +217,20 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div v-else="showVideo" class="video-container">
+    <div
+      :class="[
+        'video-container',
+        'opacity-0',
+        'pointer-events-none',
+        { 'opacity-100': showVideo },
+      ]"
+    >
       <video
         id="myVideo"
         ref="videoPlayer"
         class="full-screen-video"
+        preload="auto"
         @ended="onVideoEnded"
-        autoplay
       >
         <source
           :src="`https://s3.ap-southeast-1.amazonaws.com/coreinteraction.arplanets.com/web_project/prod/minhsiungdashiye/waterlight/video${type}.mp4`"
@@ -266,7 +273,7 @@ onUnmounted(() => {
 }
 
 .typing {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
   color: #cccccc;
   resize: none;
   overflow: hidden;

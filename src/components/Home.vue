@@ -1,16 +1,16 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import 'vue3-toastify/dist/index.css';
-import router from '../rotuer/index';
+import { ref, onMounted, onUnmounted } from "vue";
+import "vue3-toastify/dist/index.css";
+import router from "../rotuer/index";
 
 //safari 100vh
 const setViewportHeight = () => {
   const vh = window.innerHeight;
-  document.documentElement.style.setProperty('--adjusted-vh', `${vh}px`);
+  document.documentElement.style.setProperty("--adjusted-vh", `${vh}px`);
 };
 
 setViewportHeight();
-window.addEventListener('resize', setViewportHeight);
+window.addEventListener("resize", setViewportHeight);
 
 const activeImage = ref(0);
 
@@ -20,9 +20,9 @@ const toggleImages = () => {
 
 let interval;
 
-const button = type => {
+const button = (type) => {
   router.push({
-    path: '/pray',
+    path: "/pray",
     query: {
       type,
     },
@@ -30,10 +30,10 @@ const button = type => {
 };
 
 onMounted(async () => {
-  import('./result.vue');
+  import("./result.vue");
   interval = setInterval(toggleImages, 700);
-  const userAgent = navigator.userAgent.toLowerCase();
-  alert(userAgent);
+  // const userAgent = navigator.userAgent.toLowerCase();
+  // alert(userAgent);
 });
 
 onUnmounted(() => {
@@ -117,7 +117,7 @@ onUnmounted(() => {
 }
 
 .typing {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
   color: #b98c48;
   font-weight: 700;
 }
